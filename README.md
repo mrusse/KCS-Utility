@@ -35,7 +35,9 @@ Features:
     This feature should automatically start when the date starts playing and stop when it ends.
     It also trims any dead so only the date recording remains.
 
+
 5. Change settings (dosbox location, recording device)
+
 
 
 5. Exit    
