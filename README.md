@@ -7,6 +7,7 @@
 - There are auto record and playback features built in so you do not need to use an external program such as audacity
 - The script defaults to CUTS mode when encoding to take full advantage of the KCS08 program
 - Please refer to the demonstration video for specific instructions on how to use the script
+- Limited experimental support for Linux (currently only supports encode/decode, no playback/device reading yet)
 
 ##  Demonstration Video:
 
@@ -17,11 +18,13 @@ alt="Demonstration video" width="700" height="525" border="0" /></a>
 
 ## Installation
 
-You will first need to install [DOSBox](https://www.dosbox.com/download.php?main=1)
+You will first need to install [DOSBox](https://www.dosbox.com/download.php?main=1). On Linux, most package managers should have a package available named `dosbox`.
 
 On Windows you may need to install "Microsoft Visual C++ 14.0" which comes with "Microsoft Visual C++ Build Tools".
 
-To install the external dependencies for this project, run:
+On Linux, you may need to install the `portaudio19-dev` and `python3-pyaudio` packages.
+
+To install the external libraries for this project, run:
 ```
 python -m pip install -r requirements.txt
 ```
