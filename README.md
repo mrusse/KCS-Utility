@@ -2,7 +2,7 @@
 
 Overview
 - This python script is built to streamline and simplify KCS08
-- It requires DOSBox to run due to KCS08 being a dos program
+- It requires DOSBox to be installed to run (but you do not need to open it) due to KCS08 being a dos program
 - With this script the encoding and decoding process becomes much easier
 - There are auto record and playback features built in so you do not need to use an external program such as audacity
 - The script defaults to CUTS mode when encoding to take full advantage of the KCS08 program
