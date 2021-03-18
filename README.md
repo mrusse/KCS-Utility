@@ -1,6 +1,6 @@
 # KCS Utility V1.0
 
-Overview
+## Overview
 - This python script is built to streamline and simplify KCS08
 - It requires DOSBox to be installed to run (but you do not need to open it) due to KCS08 being a dos program
 - With this script the encoding and decoding process becomes much easier
@@ -8,14 +8,22 @@ Overview
 - The script defaults to CUTS mode when encoding to take full advantage of the KCS08 program
 - Please refer to the demonstration video for specific instructions on how to use the script
 
-Demonstration Video:
-
+##  Demonstration Video:
 
 <a href="https://www.youtube.com/watch?v=LhpXfOWhbPY
 " target="_blank"><img src="http://img.youtube.com/vi/LhpXfOWhbPY/0.jpg" 
 alt="Demonstration video" width="700" height="525" border="0" /></a>
 
-Features:
+
+## Installation
+On Windows you may need to install "Microsoft Visual C++ 14.0" which comes with "Microsoft Visual C++ Build Tools".
+
+To install the external dependencies for this project, run:
+```
+python -m pip install -r requirements.txt
+```
+
+## Features
 1. Encode file
     
     This simply automates opening of dosbox mounting your current directory and executing an encode command with KCS.
@@ -38,11 +46,9 @@ Features:
 
 5. Change settings (dosbox location, recording device)
 
-
-
 5. Exit    
 
-Known Limitations
+## Known Limitations
 - Low quality cassette players may have limited success with this program (this is true with base KCS08 as well)
 - KCS itself is very outdated and slow. I am looking into making a new encoding format
 - Occasionally KCS itself will add a garbage byte at the beginning of a decoded file or remove the first byte of a file.
