@@ -16,6 +16,9 @@ alt="Demonstration video" width="700" height="525" border="0" /></a>
 
 
 ## Installation
+
+You will first need to install [DOSBox](https://www.dosbox.com/download.php?main=1)
+
 On Windows you may need to install "Microsoft Visual C++ 14.0" which comes with "Microsoft Visual C++ Build Tools".
 
 To install the external dependencies for this project, run:
