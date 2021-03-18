@@ -9,7 +9,9 @@ Overview
 - Please refer to the demonstration video for specific instructions on how to use the script
 
 Demonstration:
-https://www.youtube.com/watch?v=LhpXfOWhbPY
+<a href="https://www.youtube.com/watch?v=LhpXfOWhbPY
+" target="_blank"><img src="http://img.youtube.com/vi/LhpXfOWhbPY/0.jpg" 
+alt="Demonstration video" width="240" height="180" border="10" /></a>
 
 Features:
 1. Encode file
