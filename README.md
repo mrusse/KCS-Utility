@@ -1,4 +1,4 @@
-# PYKCS V1.0
+# KCS Utility V1.0
 
 Overview
 - This python script is built to streamline and simplify KCS08
