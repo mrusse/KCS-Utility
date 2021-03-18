@@ -1,11 +1,4 @@
-OooOOo.  o       O `o    O   .oOOOo.  .oOOOo.        o      'O                 
-O     `O O       o  o   O   .O     o  o     o        O       o  oO      .oOOo. 
-o      O `o     O'  O  O    o         O.             o       O   O      O    o 
-O     .o   O   o    oOo     o          `OOoo.        o       o   o      o    O 
-oOooOO'     `O'     o  o    o               `O       O      O'   O      o    o 
-o            o      O   O   O                o       `o    o     o      O    O 
-O            O      o    o  `o     .o O.    .O        `o  O      O   oO o    O 
-o'           O      O     O  `OoooO'   `oooO'          `o'     OooOO Oo `OooO'
+# PYKCS V1.0
 
 Overview
 - This python script is built to streamline and simplify KCS08
