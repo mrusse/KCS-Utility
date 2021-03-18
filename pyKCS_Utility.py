@@ -74,7 +74,7 @@ def decode_file(infile):
         trimmed.close()
 
         
-    open_decode = input("Would you like to open\"" + outfile +"\"? (Y/N):")
+    open_decode = input("Would you like to open \"" + outfile +"\"? (Y/N):")
 
     if open_decode == "Y" or open_decode == "y":
        os.startfile(outfile)
@@ -132,7 +132,6 @@ def play_wav(wav_file):
     
     while True:
         elapsed_time = time.time() - start_time
-        current_location = elapsed_time / duration
         in_bar = False
         sys.stdout.flush()
         
