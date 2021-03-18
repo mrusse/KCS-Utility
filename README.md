@@ -13,7 +13,7 @@ Demonstration Video:
 
 <a href="https://www.youtube.com/watch?v=LhpXfOWhbPY
 " target="_blank"><img src="http://img.youtube.com/vi/LhpXfOWhbPY/0.jpg" 
-alt="Demonstration video" width="700" height="525" border="5" /></a>
+alt="Demonstration video" width="700" height="525" border="0" /></a>
 
 Features:
 1. Encode file
