@@ -5,7 +5,7 @@
 - It requires DOSBox to be installed to run (but you do not need to open it) due to KCS08 being a dos program
 - With this script the encoding and decoding process becomes much easier
 - There are auto record and playback features built in so you do not need to use an external program such as audacity
-- The script defaults to CUTS mode when encoding to take full advantage of the KCS08 program
+- The script allows you to pick between KCS (300 baud) or CUTS (1200 baud). 300 baud may work better on worse quality recorders
 - Please refer to the demonstration video for specific instructions on how to use the script
 
 ##  Demonstration Video:
@@ -49,10 +49,11 @@ python -m pip install -r requirements.txt
 
 5. Change settings (dosbox location, recording device)
 
-5. Exit    
+6. Exit    
 
 ## Known Limitations
-- Low quality cassette players may have limited success with this program (this is true with base KCS08 as well)
+- Low quality cassette players may have limited success with this program (this is true with base KCS08 as well).
+  To make the most of these low quality recorder you may need to experiment with recording levels.
 - KCS itself is very outdated and slow. I am looking into making a new encoding format
 - Occasionally KCS itself will add a garbage byte at the beginning of a decoded file or remove the first byte of a file.
   I have tried my best to mitigate this issue through the use of this script. If it does happen it can be fixed by editing the decoded file in a text editor.
