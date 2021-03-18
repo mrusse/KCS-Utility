@@ -8,12 +8,12 @@ Overview
 - The script defaults to CUTS mode when encoding to take full advantage of the KCS08 program
 - Please refer to the demonstration video for specific instructions on how to use the script
 
-Demonstration:
+Demonstration Video:
 
 
 <a href="https://www.youtube.com/watch?v=LhpXfOWhbPY
 " target="_blank"><img src="http://img.youtube.com/vi/LhpXfOWhbPY/0.jpg" 
-alt="Demonstration video" width="500" height="375" border="10" /></a>
+alt="Demonstration video" width="700" height="525" border="5" /></a>
 
 Features:
 1. Encode file
