@@ -239,12 +239,12 @@ def init_dos():
     #get dosbox location (TODO check its a good filepath)
     if not os.path.isfile("pyKCSconfig.txt"):
         dosbox_location = input("Please input the filepath for DOSBox.exe\n"\
-                                "For example C:\Program Files (x86)\DOSBox-0.74-3\DOSBox.exe\n"\
+                                "For example C:\\Program Files (x86)\\DOSBox-0.74-3\\DOSBox.exe\n"\
                                 "You only have to do this once:")
         while not os.path.isfile(dosbox_location):
             print("File not found.")
             dosbox_location = input("Please input the filepath for DOSBox.exe\n"\
-                                "For example C:\Program Files (x86)\DOSBox-0.74-3\DOSBox.exe\n"\
+                                "For example C:\\Program Files (x86)\\DOSBox-0.74-3\\DOSBox.exe\n"\
                                 "You only have to do this once:")
 
         location_file = open("pyKCSconfig.txt","w")
@@ -333,8 +333,9 @@ def menu():
         record_wav()
         
     if menu_option == '5':
-        os.remove("dosbox_location.txt")
+        os.remove("pyKCSConfig.txt")
         init_dos()
+        print ("\nRESTART the script for these changes to take effect.")
         
     if menu_option == '6':
         quit()
