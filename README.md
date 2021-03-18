@@ -17,16 +17,20 @@ alt="Demonstration video" width="700" height="525" border="0" /></a>
 
 Features:
 1. Encode file
+    
     This simply automates opening of dosbox mounting your current directory and executing an encode command with KCS.
 
 2. Decode file
+    
     If you already have a WAV file with encoded date you can use this to decode. Same functionality as 1.
     
 3. Play WAV for cassette recording
+    
     If you already have a WAV file with encoded data you can use this option to play it through your system for a cassette deck to record.
     (Note set system output to your cassette deck to not blow your ears off)
 
 4. Record cassette to WAV
+    
     Record a cassette decks output to the scipt for decoding. Make sure to set your levels so they maz out (around 0 dB).
     This feature should automatically start when the date starts playing and stop when it ends.
     It also trims any dead so only the date recording remains.
