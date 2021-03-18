@@ -20,6 +20,8 @@ def encode_file():
     print("\nEncode file")
     infile = input("Input filename:")
 
+    print(infile)
+
     while not os.path.isfile(infile):
         print("File not found. Make sure the file is in the currect directory.")
         infile = input("Input filename:")
@@ -28,13 +30,8 @@ def encode_file():
     
     outfile = input("Output WAV filename:")
 
-    #f = open("encode.wav", "w")
-    #f.close()
-
     KCS = "KCS -M -Y -U -L5 " + "toEncode.mjr" + " " + "encode.wav"
-
     dosbox_args = [r'mount c ' + cwd,'C:',KCS,'exit']
-
     run_dosbox(dosbox_args)
 
     os.rename("toEncode.mjr",infile)
