@@ -441,6 +441,6 @@ while True:
         file = open("pyKCSconfig.txt","r")
         lines = file.readlines()
         dosbox_location = lines[0].rstrip()
-        device_id = lines [1].rstrip()
+        device_id = int(lines [1].rstrip())
         baud = lines[2]    
     menu(dosbox_location,device_id,baud)
