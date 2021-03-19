@@ -64,6 +64,7 @@ def decode_file(infile):
     
     outfile = input("Output filename:")
 
+    #choose the right baud and make KCS command to send to dosbox
     if baud == "300":
         KCS = "KCS -Y " + "toDecode.wav" + " " + "decode.mjr"
     if baud == "1200":
@@ -71,6 +72,7 @@ def decode_file(infile):
 
     dosbox_args = [r'mount c ' + cwd,'C:',KCS,'exit']
 
+    #if theres already the file remove it and replace
     if os.path.isfile(outfile):
         os.remove(outfile)
 
@@ -79,18 +81,20 @@ def decode_file(infile):
     os.rename("toDecode.wav",infile)
     os.rename("decode.mjr",outfile)
 
-    if infile == "output.wav" and baud == "1200":
-        f = open(outfile, 'rb')
-        f.seek(1) # skip the first 1 byte
-        trim = f.read()
-        f.close()
-        trimmed = open(outfile, 'wb')
-        trimmed.write(trim)
-        trimmed.close()
+    #keeping this commented to atone for my sins
 
+    #if infile == "output.wav" and baud == "1200":
+        #f = open(outfile, 'rb')
+        #f.seek(1) # skip the first 1 byte
+        #trim = f.read()
+        #f.close()
+        #trimmed = open(outfile, 'wb')
+        #trimmed.write(trim)
+        #trimmed.close()
         
     open_decode = input("Would you like to open \"" + outfile +"\"? (Y/N):")
 
+    #open decoded file 
     if open_decode == "Y" or open_decode == "y":
        os.startfile(outfile)
 
@@ -184,6 +188,7 @@ def play_wav(wav_file):
     
 def record_wav():
 
+    #stand audio setup
     p = pyaudio.PyAudio()
     info = p.get_host_api_info_by_index(0)
 
@@ -208,6 +213,7 @@ def record_wav():
     frames = []
     recorded = 0
     
+    #detects when incoming audio stream is higher than -7db. It only records then. This should get the data only
     while True:
         sys.stdout.flush()   
         data = stream.read(chunk)
@@ -220,18 +226,22 @@ def record_wav():
             #data2 = stream.read(chunk)
             recorded = 1
             frames.append(data)
-        if recorded == 1 and decibel < -7:
+        if recorded == 1 and decibel < -7: #detects data is done
             break
-        if keyboard.is_pressed('esc'):
+        if keyboard.is_pressed('esc'): #abort
             break
             
     stream.stop_stream()
     stream.close()
     
     p.terminate()
-    
+
     keyboard.press('backspace')
     
+    #delete blank spots from start (i hope this fixes the garbage byte)
+    for i in range(50):
+        frames.pop(0)
+
     wf = wave.open("output2.wav", 'wb')
     wf.setnchannels(channels)
     wf.setsampwidth(p.get_sample_size(sample_format))
@@ -241,7 +251,7 @@ def record_wav():
     
     sys.stdout.flush()
     
-    #Convert to 8 bit unsigned pcm
+    #Convert to 8 bit unsigned pcm (create new file and delete old)
     data, samplerate = soundfile.read('output2.wav')
     soundfile.write('output.wav',data, fs, subtype='PCM_U8')
     
@@ -252,7 +262,7 @@ def record_wav():
         decode_file("output.wav")
         
 
-#initize dosbox location and devices and baud
+#initize dosbox location and devices and baud (longer than it has to be could seperate each option into new fcn to revoic repeating)
 def init_dos(from_settings):
 
     if from_settings == True:
@@ -283,6 +293,7 @@ def init_dos(from_settings):
 
         if setting_option == '2':
 
+            #get audio devices
             p = pyaudio.PyAudio()
             info = p.get_host_api_info_by_index(0)
             numdevices = info.get('deviceCount')
@@ -336,7 +347,7 @@ def init_dos(from_settings):
         location_file.write("\n")
         location_file.close()
         
-        #get device numbers
+        #get audio devices
         p = pyaudio.PyAudio()
         info = p.get_host_api_info_by_index(0)
         numdevices = info.get('deviceCount')
