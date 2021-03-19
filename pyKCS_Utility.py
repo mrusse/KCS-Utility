@@ -256,11 +256,10 @@ def record_wav():
 def init_dos(from_settings):
 
     if from_settings == True:
-        print("\nSETTINGS\n1.Edit DOSBox location\n2.Change default recording device\n3.Select baud rate\n")
 
         setting_option = input("Select option:")
         
-        while not setting_option != '1' and setting_option != '2' and setting_option != '3':
+        while setting_option != '1' and setting_option != '2' and setting_option != '3':
             print("\nNot an option please select 1-3\n")
             setting_option = input("Select option:")
 
@@ -392,8 +391,7 @@ def rms(data):
     return math.sqrt( sum_squares / count )
  
 #Menu options
-def menu():
-
+def menu(dosbox_location,device_id,baud):
     print("\nMENU\n\
 1.Encode file\n\
 2.Decode file\n\
@@ -428,8 +426,8 @@ def menu():
         record_wav()
         
     if menu_option == '5':
+        print("\nSETTINGS\n1.Edit DOSBox location: \"%s\"\n2.Change default recording device: Device #: %s\n3.Select baud rate: %s baud\n" % (dosbox_location,device_id,baud))
         dosbox_location, device_id, baud = init_dos(True)
-        print("%s%s%s" % (dosbox_location,device_id,baud))
 
     if menu_option == '6':
         quit()
@@ -439,4 +437,10 @@ dosbox_location, device_id, baud = init_dos(False)
 cwd = os.getcwd()
 
 while True:
-    menu()
+    if os.path.isfile("pyKCSconfig.txt"):
+        file = open("pyKCSconfig.txt","r")
+        lines = file.readlines()
+        dosbox_location = lines[0].rstrip()
+        device_id = lines [1].rstrip()
+        baud = lines[2]    
+    menu(dosbox_location,device_id,baud)
