@@ -1,5 +1,5 @@
 stderr.txt
 stdout.txt
-output.wav
+*.wav
 pyKCSconfig.txt
 settings.json
