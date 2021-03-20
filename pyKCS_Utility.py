@@ -315,19 +315,19 @@ def record_wav(auto_name,list_meta):
         rms_data = rms(data)
         decibel = 20 * math.log10(rms_data)
         if decibel < -7:
-            print("Listening for data... %.2f decibels press esc to abort                                                   " % (decibel),end = '\r')
+            print("Listening for data... %.2f decibels press esc to abort                                           " % (decibel),end = '\r')
         if decibel > -7:
             if auto_name == "Y" or auto_name == "y":
-                print("Recording meta data... %.2f decibels press esc to abort                                              " % (decibel),end = '\r')
+                print("Recording meta data... %.2f decibels press esc to abort                                      " % (decibel),end = '\r')
             else:
                 if auto_name == "N" and list_meta == True:
                     if elapsed_time <= file_length:
                         if start_time == 0:
                             start_time = time.time()
                         elapsed_time = time.time() - start_time
-                    print("Recording \"%s\", Size: %.1fkb, Recording at: %.2fdb, Time left: %ds, Press esc to abort         " % (file_name,file_size,decibel,int(file_length) - elapsed_time),end = '\r')
+                    print("Recording \"%s\", Size: %.1fkb, Recording at: %.2fdb, Time left: %ds, Press esc to abort " % (file_name,file_size,decibel,int(file_length) - elapsed_time),end = '\r')
                 else:
-                    print("Recording file data... %.2f decibels press esc to abort                                          " % (decibel),end = '\r')
+                    print("Recording file data... %.2f decibels press esc to abort                                   " % (decibel),end = '\r')
             #data2 = stream.read(chunk)
             recorded = 1
             frames.append(data)
