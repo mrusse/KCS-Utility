@@ -19,7 +19,13 @@ alt="Demonstration video" width="700" height="525" border="0" /></a>
 
 You will first need to install [DOSBox](https://www.dosbox.com/download.php?main=1)
 
-On Windows you may need to install "Microsoft Visual C++ 14.0" which comes with "Microsoft Visual C++ Build Tools".
+Installing `PyAudio` on Windows is a bit tricky. To expedite the process, you should probably use `pipwin` to install it. First, install `pipwin` how you would normally install a Python package (e.g. `pip3 install . . .`), then:
+
+```
+pipwin install pyaudio
+```
+
+If issues still persist, you may need to install "Microsoft Visual C++ 14.0" which is installed by installing "Microsoft Visual C++ Build Tools".
 
 To install the external dependencies for this project, run:
 ```
@@ -49,7 +55,15 @@ python -m pip install -r requirements.txt
 
 5. Change settings (dosbox location, recording device)
 
-6. Exit    
+6. Exit
+
+## Troubleshooting
+
+- **I keep getting `RuntimeError: Error opening 'output.wav': System error.`**
+    - You probably have `output.wav` opened up in another program, which prevents `KCS-Utility` from opening it up for reading. Close whatever's keeping it open and record again.
+
+- **The recording is empty.**
+    - There's a chance your audio output might not be loud enough for the program to pick it up. This is also apparent when it doesn't stop the recording automatically (because it will detect noticeable audio, continue recording, and then stop upon silence).
 
 ## Known Limitations
 - Low quality cassette players may have limited success with this program (this is true with base KCS08 as well).

@@ -239,7 +239,7 @@ def record_wav():
     keyboard.press('backspace')
     
     #delete blank spots from start (i hope this fixes the garbage byte)
-    if frames:
+    if len(frames) > 50:
         for i in range(50):
             frames.pop(0)
 
