@@ -276,7 +276,9 @@ def record_wav(auto_name,list_meta):
             file_size = float(lines [1].rstrip())
             file_length = float(lines[2].rstrip())
             elapsed_time = 0
-            start_time = 0   
+            start_time = 0
+            info_file.close()
+            os.remove("kcs_metadata.tmp")   
 
     #audio setup
     p = pyaudio.PyAudio()
