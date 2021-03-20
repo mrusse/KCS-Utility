@@ -56,7 +56,7 @@ def encode_file():
     if play_audio == "Y" or play_audio == "y":
         play_wav(outfile,infile,auto_name)
 
-def decode_file(infile):
+def decode_file(infile,outfile):
 
     while not os.path.isfile(infile):
         print("File not found. Make sure the file is in the currect directory.")
@@ -66,8 +66,6 @@ def decode_file(infile):
         os.remove("toDecode.wav")
 
     os.rename(infile,"toDecode.wav")
-    
-    outfile = input("Output filename:")
 
     #choose the right baud and make KCS command to send to dosbox
     if baud == "300":
@@ -96,20 +94,21 @@ def decode_file(infile):
         #trimmed = open(outfile, 'wb')
         #trimmed.write(trim)
         #trimmed.close()
-        
-    open_decode = input("Would you like to open \"" + outfile +"\"? (Y/N):")
-
-    while open_decode != "y" and open_decode != "Y" and open_decode != "n" and open_decode != "N":
-        print("Invalid input.")
+    if outfile != "kcs_metadata.tmp":    
         open_decode = input("Would you like to open \"" + outfile +"\"? (Y/N):")
 
-    #open decoded file 
-    if open_decode == "Y" or open_decode == "y":
-       os.startfile(outfile)    
+        while open_decode != "y" and open_decode != "Y" and open_decode != "n" and open_decode != "N":
+            print("Invalid input.")
+            open_decode = input("Would you like to open \"" + outfile +"\"? (Y/N):")
+
+        #open decoded file 
+        if open_decode == "Y" or open_decode == "y":
+            os.startfile(outfile)    
 
 #Play audio
 def play_wav(wav_file,infile,auto_name):
 
+    #get meta data and encode then recursivly call to play meta data. after call it continues playing normal file
     if auto_name == "y" or auto_name == "Y":
 
         print("Encoding file details... ", end = '\r')
@@ -119,7 +118,13 @@ def play_wav(wav_file,infile,auto_name):
 
         info_file = open("kcs_metadata.tmp" , "w")
         info_file.write(infile +"\n") 
-        info_file.write(str(float(os.path.getsize(infile) / 1000)) + "\n")
+
+        if not os.path.isfile(infile):
+            file_size = input("Please provide file size in kb:")
+        else:
+            file_size = str(float(os.path.getsize(infile) / 1000))
+
+        info_file.write(file_size + "\n")
 
         #get wav file duration
         wf = wave.open(wav_file)
@@ -145,9 +150,9 @@ def play_wav(wav_file,infile,auto_name):
         out_info_file = "kcs_metadata.wav"
 
         if baud == "300":
-            KCS = "KCS -M -Y -L5 " + "toEncode.mjr" + " " + "encode.wav"
+            KCS = "KCS -M -Y -L2 " + "toEncode.mjr" + " " + "encode.wav"
         if baud == "1200":
-            KCS = "KCS -M -Y -U -L5 " + "toEncode.mjr" + " " + "encode.wav"
+            KCS = "KCS -M -Y -U -L2 " + "toEncode.mjr" + " " + "encode.wav"
 
         dosbox_args = [r'mount c ' + cwd,'C:',KCS,'exit']
 
@@ -164,7 +169,8 @@ def play_wav(wav_file,infile,auto_name):
         auto_name = "Y"
         os.remove("kcs_metadata.tmp")
         os.remove("kcs_metadata.wav")
-        time.sleep(2)
+        #place gap between metadata and file so theres time to read the meta data when recording back (3 seconds might work but 5 is safe)
+        time.sleep(5)
 
     if auto_name == "N" or auto_name == "n":
         print("Press space to start playback:")
@@ -181,7 +187,7 @@ def play_wav(wav_file,infile,auto_name):
             if i == 1:
                 print("%s%s " % (count[0],count[1]),end = '\r')
             if i == 2:
-                print("%s%s%s " % (count[0],count[1],count[2]))
+                print("%s%s%s\n " % (count[0],count[1],count[2]))
             sys.stdout.flush()
             time.sleep(1)
     
@@ -200,7 +206,10 @@ def play_wav(wav_file,infile,auto_name):
 
     #get duration and set variables for the progress bar
     duration = frames / float(rate)
-    print("Playing: " + wav_file +"\n")
+    if wav_file == "kcs_metadata.wav":
+        print("Sending meta data...")
+    else:    
+        print("Playing: " + wav_file)
    
     data = wf.readframes(chunk)
     start_time = time.time()
@@ -212,7 +221,8 @@ def play_wav(wav_file,infile,auto_name):
     #Print the initial bar
     bar = '█' * bar_count
     line = '-' * int(50 - bar_count)
-    print(' |%s%s|       ' % (bar,line),end ='\r')
+    if wav_file != "kcs_metadata.wav":
+        print(' |%s%s|       ' % (bar,line),end ='\r')
     bar_count = 1
     
     while True:
@@ -240,7 +250,7 @@ def play_wav(wav_file,infile,auto_name):
             data = wf.readframes(chunk)
         
         if data == b'':
-            print('')
+            print('',end = '')
             break
 
     #stop stream
@@ -255,17 +265,29 @@ def play_wav(wav_file,infile,auto_name):
     keyboard.press('backspace')
     sys.stdout.flush()
     
-def record_wav():
+def record_wav(auto_name,list_meta):
 
-    #stand audio setup
+    #recusive run list meta date for incoming file
+    if auto_name == "N" and list_meta == True:
+        if os.path.isfile("kcs_metadata.tmp"):
+            info_file = open("kcs_metadata.tmp" , "r")
+            lines = info_file.readlines()
+            file_name = lines[0].rstrip()
+            file_size = float(lines [1].rstrip())
+            file_length = float(lines[2].rstrip())
+            elapsed_time = 0
+            start_time = 0   
+
+    #audio setup
     p = pyaudio.PyAudio()
     info = p.get_host_api_info_by_index(0)
 
-    print("Press space to start recording:")
-    sys.stdout.flush()
-    while True:
-        if keyboard.is_pressed('space'):
-            break
+    if list_meta == False:
+        print("Press space to start recording:")
+        sys.stdout.flush()
+        while True:
+            if keyboard.is_pressed('space'):
+                break
             
     chunk = 1024
     sample_format = pyaudio.paInt16 #16 bit sample
@@ -280,18 +302,30 @@ def record_wav():
                 input_device_index=device_id)
     
     frames = []
+    
     recorded = 0
     sys.stdout.flush() #why the fuck am i still getting random things printing I DONT WANT THEM
     #detects when incoming audio stream is higher than -7db. It only records then. This should get the data only
+    
     while True:
         sys.stdout.flush()   
         data = stream.read(chunk)
         rms_data = rms(data)
         decibel = 20 * math.log10(rms_data)
         if decibel < -7:
-            print("Listening for data... %.2f decibels press esc to abort " % (decibel),end = '\r')
+            print("Listening for data... %.2f decibels press esc to abort                                                   " % (decibel),end = '\r')
         if decibel > -7:
-            print("Recording data... %.2f decibels press esc to abort     " % (decibel),end = '\r')
+            if auto_name == "Y" or auto_name == "y":
+                print("Recording meta data... %.2f decibels press esc to abort                                              " % (decibel),end = '\r')
+            else:
+                if auto_name == "N" and list_meta == True:
+                    if elapsed_time <= file_length:
+                        if start_time == 0:
+                            start_time = time.time()
+                        elapsed_time = time.time() - start_time
+                    print("Recording \"%s\", Size: %.1fkb, Recording at: %.2fdb, Time left: %ds, Press esc to abort         " % (file_name,file_size,decibel,int(file_length) - elapsed_time),end = '\r')
+                else:
+                    print("Recording file data... %.2f decibels press esc to abort                                          " % (decibel),end = '\r')
             #data2 = stream.read(chunk)
             recorded = 1
             frames.append(data)
@@ -308,8 +342,8 @@ def record_wav():
     keyboard.press('backspace')
     
     #delete blank spots from start (i hope this fixes the garbage byte)
-    if len(frames) > 50:
-        for i in range(50):
+    if len(frames) > 5:
+        for i in range(5):
             frames.pop(0)
 
     wf = wave.open("output2.wav", 'wb')
@@ -327,15 +361,34 @@ def record_wav():
     
     os.remove("output2.wav")
 
-    decode_option = input("Generated \"output.wav\" would you like to decode? (Y/N):")
-
-    while decode_option != "y" and decode_option != "Y" and decode_option != "n" and decode_option != "N":
-        print("Invalid input.")
+    if auto_name == "Y" or auto_name == "y":
+        decode_file("output.wav","kcs_metadata.tmp")
+        auto_name = "N"
+        list_meta = True
+        record_wav(auto_name,list_meta)
+        auto_name = "Y"
+    elif auto_name == "N" and list_meta == True:
+        print("Decoding file: %s, file size: %.1fkb                                                                                        " % (file_name ,file_size))
+        infile = "output.wav"
+        while not os.path.isfile(infile):
+            print("File not found. Make sure the file is in the currect directory.")
+            infile = input("Input WAV filename:")
+        decode_file(infile,file_name)
+    else:
         decode_option = input("Generated \"output.wav\" would you like to decode? (Y/N):")
 
-    #open decoded file 
-    if decode_option == "Y" or decode_option == "y":
-        decode_file("output.wav")
+        while decode_option != "y" and decode_option != "Y" and decode_option != "n" and decode_option != "N":
+            print("Invalid input.")
+            decode_option = input("Generated \"output.wav\" would you like to decode? (Y/N):")
+
+        #open decoded file 
+        if decode_option == "Y" or decode_option == "y":
+            infile = "output.wav"
+            while not os.path.isfile(infile):
+                print("File not found. Make sure the file is in the currect directory.")
+                infile = input("Input WAV filename:")
+            outfile = input("Output filename:")
+            decode_file(infile,outfile)
         
 
 #initize dosbox location and devices and baud (longer than it has to be could seperate each option into new fcn to revoic repeating)
@@ -410,10 +463,10 @@ def init_dos(from_settings):
 
         if setting_option == '4':
 
-            auto_name = input("\nWould you like to automaticly store file names for easier decoding?\nThis setting will encode and store the filename with the file.\nWhen decoding it will automaticly give the file its correct name.\n\nEnable? (Y/N):")
+            auto_name = input("\nWould you like to automaticly store meta data for easier decoding?\nThis setting will encode and store the file name, size, and length with the file.\nWhen decoding it will automaticly give the file its correct name.\n\nEnable? (Y/N):")
             while auto_name != "y" and auto_name != "Y" and auto_name != "n" and auto_name != "N":
                 print("Invalid input.")
-                auto_name = input("\nWould you like to automaticly store file names for easier decoding?\nThis setting will encode and store the filename with the file.\nWhen decoding it will automaticly give the file its correct name.\n\nEnable? (Y/N):")
+                auto_name = input("\nWould you like to automaticly store meta data for easier decoding?\nThis setting will encode and store the file name, size, and length with the file.\nWhen decoding it will automaticly give the file its correct name.\n\nEnable? (Y/N):")
             
             lines[3] = auto_name + "\n"    
             dosbox_location = lines[0]
@@ -471,11 +524,11 @@ def init_dos(from_settings):
         location_file.write("\n")
 
 
-        auto_name = input("\nWould you like to automaticly store file names for easier decoding?\nThis setting will encode and store the filename with the file.\nWhen decoding it will automaticly give the file its correct name.\n\nEnable? (Y/N):")
+        auto_name = input("\nWould you like to automaticly store meta data for easier decoding?\nThis setting will encode and store the file name, size, and length with the file.\nWhen decoding it will automaticly give the file its correct name.\n\nEnable? (Y/N):")
 
         while auto_name != "y" and auto_name != "Y" and auto_name != "n" and auto_name != "N":
             print("Invalid input.")
-            auto_name = input("\nWould you like to automaticly store file names for easier decoding?\nThis setting will encode and store the filename with the file.\nWhen decoding it will automaticly give the file its correct name.\n\nEnable? (Y/N):")
+            auto_name = input("\nWould you like to automaticly store meta data for easier decoding?\nThis setting will encode and store the file name, size, and length with the file.\nWhen decoding it will automaticly give the file its correct name.\n\nEnable? (Y/N):")
 
         if auto_name == "Y" or auto_name == "y":
             location_file.write(auto_name)
@@ -513,7 +566,7 @@ def menu(dosbox_location,device_id,baud,auto_name):
 2.Decode file\n\
 3.Play WAV for cassette recording\n\
 4.Record cassette to WAV\n\
-5.Change settings (dosbox location, recording device, baud rate)\n\
+5.Change settings (dosbox location, recording device, baud rate, meta data)\n\
 6.Exit\n")
 
     menu_option = input("Select option:")
@@ -527,9 +580,14 @@ def menu(dosbox_location,device_id,baud,auto_name):
         encode_file()
     
     if menu_option == '2':
+        auto_name = "N"
         print("\nDecode file")
         infile = input("Input WAV filename:")
-        decode_file(infile)
+        while not os.path.isfile(infile):
+                print("File not found. Make sure the file is in the currect directory.")
+                infile = input("Input WAV filename:")
+        outfile = input("Output filename:")
+        decode_file(infile,outfile)
       
     if menu_option == '3':
 
@@ -542,17 +600,16 @@ def menu(dosbox_location,device_id,baud,auto_name):
             file_to_play = input("Input WAV filename:")
         
         if(auto_name == "y" or auto_name == "Y"):
-            #TODO if this file doesnt exist ask them for its details
-            infile = input("Original filename:")
+            infile = input("Original filename:") 
             play_wav(file_to_play,infile,auto_name)    
         else:
             play_wav(file_to_play,infile,"N")
         
     if menu_option == '4':
-        record_wav()
+        record_wav(auto_name,False)
         
     if menu_option == '5':
-        print("\nSETTINGS\n1.Edit DOSBox location: \"%s\"\n2.Change default recording device: Device #: %s\n3.Select baud rate: %s baud\n4.Automatically encode filenames: %s" % (dosbox_location,device_id,baud,auto_name))
+        print("\nSETTINGS\n1.Edit DOSBox location: \"%s\"\n2.Change default recording device: Device #: %s\n3.Select baud rate: %s baud\n4.Automatically encode meta data: %s" % (dosbox_location,device_id,baud,auto_name))
         dosbox_location, device_id, baud, auto_name = init_dos(True)
 
     if menu_option == '6':
