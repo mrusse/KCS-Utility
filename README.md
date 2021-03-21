@@ -53,7 +53,10 @@ python -m pip install -r requirements.txt
     It also trims any dead so only the date recording remains.
 
 
-5. Change settings (dosbox location, recording device)
+5. Change settings (dosbox location, recording device, baud rate ,save meta data)
+
+    Most of the settings are self explanatory. The meta data option allow the program to encode a small text file infront of your file when recording to cassette.
+    Then when recording back from the cassette it will know information about the file in advanced. Very useful give it a try.
 
 6. Exit
 
@@ -66,6 +69,7 @@ python -m pip install -r requirements.txt
     - There's a chance your audio output might not be loud enough for the program to pick it up. This is also apparent when it doesn't stop the recording automatically (because it will detect noticeable audio, continue recording, and then stop upon silence).
 
 ## Known Limitations
+-Trying to record windows audio (choosing a audio device such as internal audio as your recording device) will crahs the program. This is a fault with pyaudio. Choose a real recording device.
 - Low quality cassette players may have limited success with this program (this is true with base KCS08 as well).
   To make the most of these low quality recorders you may need to experiment with recording levels. This script detects programs above -7db so thats where you should aim to calibrate your player. This is easier with a higher quality player since the sound will be more crisp at high volumes.
 - KCS itself is very outdated and slow. I am looking into making a new encoding format
