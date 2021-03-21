@@ -70,9 +70,9 @@ python -m pip install -r requirements.txt
 
 ## Known Limitations
 
--Trying to record windows audio (choosing a audio device such as internal audio as your recording device) will crahs the program. This is a fault with pyaudio. Choose a real recording device.
 - Low quality cassette players may have limited success with this program (this is true with base KCS08 as well).
   To make the most of these low quality recorders you may need to experiment with recording levels. This script detects programs above -7db so thats where you should aim to calibrate your player. This is easier with a higher quality player since the sound will be more crisp at high volumes.
+-Trying to record windows audio (choosing a audio device such as internal audio as your recording device) will crahs the program. This is a fault with pyaudio. Choose a real recording device.
 - KCS itself is very outdated and slow. I am looking into making a new encoding format
 - Occasionally KCS itself will add a garbage byte at the beginning of a decoded file or remove the first byte of a file.
   I have tried my best to mitigate this issue through the use of this script. If it does happen it can be fixed by editing the decoded file in a text editor.
