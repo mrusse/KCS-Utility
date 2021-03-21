@@ -370,7 +370,7 @@ def record_wav(auto_name,list_meta):
         record_wav(auto_name,list_meta)
         auto_name = "Y"
     elif auto_name == "N" and list_meta == True:
-        print("Decoding file: %s, file size: %.1fkb                                                                                        " % (file_name ,file_size))
+        print("Decoding file: %s, file size: %.1fkb                                                                            " % (file_name ,file_size))
         infile = "output.wav"
         while not os.path.isfile(infile):
             print("File not found. Make sure the file is in the currect directory.")
@@ -419,9 +419,9 @@ def init_dos(from_settings):
                                 "You only have to do this once:")
 
             lines[0] = dosbox_location + "\n"
-            device_id = lines [1]
-            baud = lines[2]
-            lines[3] = auto_name
+            device_id = int(lines [1].rstrip())
+            baud = lines[2].rstrip()
+            auto_name = lines[3].rstrip()    
 
         if setting_option == '2':
 
@@ -446,9 +446,9 @@ def init_dos(from_settings):
                 device_id = int(input("Device ID:")) 
 
             lines[1] = str(device_id) + "\n"
-            dosbox_location = lines[0]
-            baud = lines[2]
-            lines[3] = auto_name
+            dosbox_location = lines[0].rstrip()
+            baud = lines[2].rstrip()
+            auto_name = lines[3].rstrip()    
 
         if setting_option == '3':
 
@@ -459,9 +459,9 @@ def init_dos(from_settings):
                 baud = input("\nWould you like to encode at 300 or 1200 baud? (300 is easier for lower quality cassette recorders):")
 
             lines[2] = baud + "\n"    
-            dosbox_location = lines[0]
-            device_id = lines[1]
-            lines[3] = auto_name
+            dosbox_location = lines[0].rstrip()
+            device_id = int(lines [1].rstrip())
+            auto_name = lines[3].rstrip()    
 
         if setting_option == '4':
 
@@ -471,9 +471,10 @@ def init_dos(from_settings):
                 auto_name = input("\nWould you like to automaticly store meta data for easier decoding?\nThis setting will encode and store the file name, size, and length with the file.\nWhen decoding it will automaticly give the file its correct name.\n\nEnable? (Y/N):")
             
             lines[3] = auto_name + "\n"    
-            dosbox_location = lines[0]
-            device_id = lines[1]
-            baud = lines[2]
+            dosbox_location = lines[0].rstrip()
+            device_id = int(lines [1].rstrip())
+            baud = lines[2].rstrip()
+            
    
         with open("pyKCSconfig.txt", 'w') as settings:
             settings.writelines( lines )
