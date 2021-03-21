@@ -441,7 +441,7 @@ def init_dos(from_settings):
                 
             device_id = int(input("Device ID:"))  
         
-            while device_id > rec_devices or device_id < 0:
+            while device_id >= rec_devices or device_id < 0:
                 print("Cant find that ID")
                 device_id = int(input("Device ID:")) 
 
