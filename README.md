@@ -69,6 +69,7 @@ python -m pip install -r requirements.txt
     - There's a chance your audio output might not be loud enough for the program to pick it up. This is also apparent when it doesn't stop the recording automatically (because it will detect noticeable audio, continue recording, and then stop upon silence).
 
 ## Known Limitations
+
 -Trying to record windows audio (choosing a audio device such as internal audio as your recording device) will crahs the program. This is a fault with pyaudio. Choose a real recording device.
 - Low quality cassette players may have limited success with this program (this is true with base KCS08 as well).
   To make the most of these low quality recorders you may need to experiment with recording levels. This script detects programs above -7db so thats where you should aim to calibrate your player. This is easier with a higher quality player since the sound will be more crisp at high volumes.
