@@ -302,6 +302,7 @@ def record_wav(auto_name,list_meta):
     
     frames = []
     
+    noaudio = 0
     recorded = 0
     sys.stdout.flush() #why the fuck am i still getting random things printing I DONT WANT THEM
     #detects when incoming audio stream is higher than -7db. It only records then. This should get the data only
@@ -311,9 +312,9 @@ def record_wav(auto_name,list_meta):
         data = stream.read(chunk)
         rms_data = rms(data)
         decibel = 20 * math.log10(rms_data)
-        if decibel < -7:
+        if decibel < -10:
             print("Listening for data... %.2f decibels press esc to abort                                           " % (decibel),end = '\r')
-        if decibel > -7:
+        if decibel > -10:
             if auto_name == "Y" or auto_name == "y":
                 print("Recording meta data... %.2f decibels press esc to abort                                      " % (decibel),end = '\r')
             else:
@@ -328,8 +329,10 @@ def record_wav(auto_name,list_meta):
             #data2 = stream.read(chunk)
             recorded = 1
             frames.append(data)
-        if recorded == 1 and decibel < -7: #detects data is done
-            break
+        if recorded == 1 and decibel < -10: #detects data is done
+            noaudio += 1
+            if noaudio > 10:
+                break
         if keyboard.is_pressed('esc'): #abort
             break
             
